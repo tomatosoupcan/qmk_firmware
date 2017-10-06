@@ -6,14 +6,16 @@
 #define BASE 0 // norman
 #define MDIA 1 // function & media
 #define QWRT 2 // qwerty
-#define WHAT 3 // Reserved for more macros
-#define MCRO 4 // Macros
-#define NMPD 5 // number pad
-#define UNDSC LSHIFT(KC_MINUS)
-#define QUEST LSHIFT(KC_SLASH)
-#define ATBTN LSHIFT(KC_2)
-#define PRCNT LSHIFT(KC_5)
+//#define WHAT 3 // Reserved for more macros
+//#define MCRO 4 // Macros
+//#define NMPD 5 // number pad
 #define KEYPR LALT(KC_SPACE)
+#define THMUP LCTL(LSFT(KC_U))
+#define THMDWN LCTL(LSFT(KC_D))
+#define AUDSRC LCTL(LSFT(KC_GRV))
+#define SLAPTO LCTL(KC_GRV)
+#define SDESKT LCTL(LALT(KC_GRV))
+#define SHRUG LCTL(LALT(KC_8))
 
 enum custom_keycodes {
   PLACEHOLDER = SAFE_RANGE, // can always be here
@@ -22,16 +24,26 @@ enum custom_keycodes {
   RGB_SLD
 };
 
+enum {
+	TD_QURI,
+	TD_SHLE
+};
+
+qk_tap_dance_action_t tap_dance_actions[] = {
+	[TD_QURI] = ACTION_TAP_DANCE_DOUBLE(KC_QUES, LSFT(KC_0)),
+	[TD_SHLE] = ACTION_TAP_DANCE_DOUBLE(KC_LSHIFT, LSFT(KC_9))
+};
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /* Keymap 0: Basic layer
  *
  * ,--------------------------------------------------.           ,--------------------------------------------------.
  * |   ESC  |   1  |   2  |   3  |   4  |   5  |   `  |           |   _  |   6  |   7  |   8  |   9  |   0  |   =    |
  * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
- * | TAB    |   Q  |   W  |   D  |   F  |   K  | LGUI |           |  L1  |   J  |   U  |   R  |   L  |   ;  |   -    |
+ * | TAB    |   Q  |   W  |   D  |   F  |   K  | LGUI |           |MYCM  |   J  |   U  |   R  |   L  |   ;  |   -    |
  * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * | LSHIFT |   A  |   S  |   E  |   T  |   G  |------|           |------|   Y  |   N  |   I  |   O  |   H  |    ?   |
- * |--------+------+------+------+------+------| LALT |           | Meh  |------+------+------+------+------+--------|
+ * |LSHIFT/(|   A  |   S  |   E  |   T  |   G  |------|           |------|   Y  |   N  |   I  |   O  |   H  |  ?/)   |
+ * |--------+------+------+------+------+------| LALT |           | KYPR |------+------+------+------+------+--------|
  * | LCTRL  |   Z  |   X  |   C  |   V  |   B  |      |           |      |   P  |   M  |   ,  |   .  |   '  |   %    |
  * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
  *   | LK5  | LA1  |  LK2 |  LA3 |  LA4 |                                       |   [  |   ] |   /  |   \  |   @   |
@@ -50,65 +62,65 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // left hand
         KC_ESC,         KC_1  ,         KC_2 ,   KC_3 ,   KC_4 ,   KC_5,   KC_GRV ,
         KC_TAB,         KC_Q  ,         KC_W ,   KC_D ,   KC_F ,   KC_K,   KC_LGUI,
-        KC_LSFT,        KC_A  ,         KC_S ,   KC_E ,   KC_T ,   KC_G,
+        TD(TD_SHLE),        KC_A  ,         KC_S ,   KC_E ,   KC_T ,   KC_G,
         KC_LCTL,        KC_Z  ,         KC_X ,   KC_C ,   KC_V ,   KC_B,   KC_LALT,
         TG(5)  ,        OSL(1),         TG(2),   OSL(3),  OSL(4),
 																				   KC_LEFT,KC_RIGHT,
 																							  KC_UP,
 																		   KC_BSPC,KC_DEL,  KC_DOWN,
         // right hand
-             UNDSC   ,     KC_6,   KC_7,     KC_8,   KC_9,      KC_0,             KC_EQL,
+             KC_UNDS   ,     KC_6,   KC_7,     KC_8,   KC_9,      KC_0,             KC_EQL,
              KC_MYCM ,     KC_J,   KC_U,     KC_R,   KC_L,   KC_SCLN,            KC_MINS,
-                           KC_Y,   KC_N,     KC_I,   KC_O,      KC_H,              QUEST,
-                KEYPR,     KC_P,   KC_M,  KC_COMM, KC_DOT,  KC_QUOTE,              PRCNT,
-                                KC_LBRC,  KC_RBRC,KC_SLSH,    C_BSLS,              ATBTN,
+                           KC_Y,   KC_N,     KC_I,   KC_O,      KC_H,            TD(TD_QURI),
+                KEYPR,     KC_P,   KC_M,  KC_COMM, KC_DOT,  KC_QUOTE,            KC_PERC,
+                                KC_LBRC,  KC_RBRC,KC_SLSH,   KC_BSLS,              KC_AT,
  KC_HOME,        KC_END,
  KC_PGUP,
  KC_PGDN,KC_ENT, KC_SPC
     ),
-/* Keymap 1: Symbol Layer
+/* Keymap 1: Function Keys and Media Keys
  *
  * ,---------------------------------------------------.           ,--------------------------------------------------.
- * |Version  |  F1  |  F2  |  F3  |  F4  |  F5  |      |           |      |  F6  |  F7  |  F8  |  F9  |  F10 |   F11  |
+ * |  TRNS   |  F1  |  F2  |  F3  |  F4  |  F5  | PSCR |           | CAPS |  F6  |  F7  |  F8  |  F9  |  F10 |        |
  * |---------+------+------+------+------+------+------|           |------+------+------+------+------+------+--------|
- * |         |   !  |   @  |   {  |   }  |   |  |      |           |      |   Up |   7  |   8  |   9  |   *  |   F12  |
+ * |         |  F11 | F12  |  F13 | F14  | F15  |      |           |      |  F16 | F17  |  F18 | F19  | F20  |        |
  * |---------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * |         |   #  |   $  |   (  |   )  |   `  |------|           |------| Down |   4  |   5  |   6  |   +  |        |
+ * |         | Mclk | Lclk | MsUp | Rclk |      |------|           |------| VolD | MUTE | VolU | ThmU |      |        |
  * |---------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * |         |   %  |   ^  |   [  |   ]  |   ~  |      |           |      |   &  |   1  |   2  |   3  |   \  |        |
+ * |         |      |MsLeft|MsDown|MsRght|      |      |           |      | Prev | Play | Next | ThmD |      |        |
  * `---------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *   | EPRM  |      |      |      |      |                                       |      |    . |   0  |   =  |      |
+ *   |       |      |      |      |      |                                       | Stop |AudSrc|      |      |      |
  *   `-----------------------------------'                                       `----------------------------------'
  *                                        ,-------------.       ,-------------.
- *                                        |Animat|      |       |Toggle|Solid |
+ *                                        |      |      |       |      |      |
  *                                 ,------|------|------|       |------+------+------.
- *                                 |Bright|Bright|      |       |      |Hue-  |Hue+  |
- *                                 |ness- |ness+ |------|       |------|      |      |
  *                                 |      |      |      |       |      |      |      |
+ *                                 |      |      |------|       |------|      |      |
+ *                                 |      |      | EPRM |       | EPRM |      |      |
  *                                 `--------------------'       `--------------------'
  */
-// SYMBOLS
-[SYMB] = LAYOUT_ergodox(
+// Function keys and media keys
+[MDIA] = LAYOUT_ergodox(
        // left hand
-       VRSN,   KC_F1,  KC_F2,  KC_F3,  KC_F4,  KC_F5,  KC_TRNS,
-       KC_TRNS,KC_EXLM,KC_AT,  KC_LCBR,KC_RCBR,KC_PIPE,KC_TRNS,
-       KC_TRNS,KC_HASH,KC_DLR, KC_LPRN,KC_RPRN,KC_GRV,
-       KC_TRNS,KC_PERC,KC_CIRC,KC_LBRC,KC_RBRC,KC_TILD,KC_TRNS,
-          EPRM,KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,
-                                       RGB_MOD,KC_TRNS,
+       KC_TRNS,   KC_F1,  KC_F2,  KC_F3,  KC_F4,  KC_F5,  KC_PSCR,
+       KC_TRNS,  KC_F11, KC_F12, KC_F13, KC_F14, KC_F15,  KC_TRNS,
+       KC_TRNS, KC_BTN3,KC_BTN1,KC_MS_U,KC_BTN2,KC_TRNS,
+       KC_TRNS, KC_TRNS,KC_MS_L,KC_MS_D,KC_MS_R,KC_TRNS,  KC_TRNS,
+       KC_TRNS, KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,
+                                       KC_TRNS,KC_TRNS,
                                                KC_TRNS,
-                               RGB_VAD,RGB_VAI,KC_TRNS,
+                               KC_TRNS,KC_TRNS,   EPRM,
        // right hand
-       KC_TRNS, KC_F6,   KC_F7,  KC_F8,   KC_F9,   KC_F10,  KC_F11,
-       KC_TRNS, KC_UP,   KC_7,   KC_8,    KC_9,    KC_ASTR, KC_F12,
-                KC_DOWN, KC_4,   KC_5,    KC_6,    KC_PLUS, KC_TRNS,
-       KC_TRNS, KC_AMPR, KC_1,   KC_2,    KC_3,    KC_BSLS, KC_TRNS,
-                         KC_TRNS,KC_DOT,  KC_0,    KC_EQL,  KC_TRNS,
-       RGB_TOG, RGB_SLD,
+       KC_TRNS, KC_F6,   KC_F7,  KC_F8,   KC_F9,   KC_F10,  KC_TRNS,
+       KC_TRNS,KC_F16,  KC_F17, KC_F18,  KC_F19,   KC_F20,  KC_TRNS,
+                KC_VOLD, KC_MUTE,KC_VOLU,   THMUP,KC_TRNS,  KC_TRNS,
+       KC_TRNS, KC_MPRV, KC_MPLY,KC_MNXT,  THMDWN,KC_TRNS,  KC_TRNS,
+                         KC_MSTP, AUDSRC, KC_TRNS,KC_TRNS,  KC_TRNS,
+       KC_TRNS, KC_TRNS,
        KC_TRNS,
-       KC_TRNS, RGB_HUD, RGB_HUI
+       EPRM   , KC_TRNS, KC_TRNS
 ),
-/* Keymap 2: Media and mouse keys
+/* Keymap 2: QWERTY
  *
  * ,--------------------------------------------------.           ,--------------------------------------------------.
  * |        |      |      |      |      |      |      |           |      |      |      |      |      |      |        |
@@ -129,8 +141,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                                 |      |      |      |       |      |      |      |
  *                                 `--------------------'       `--------------------'
  */
-// MEDIA AND MOUSE
-[MDIA] = LAYOUT_ergodox(
+// QWERTY
+[QWRT] = LAYOUT_ergodox(
        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
        KC_TRNS, KC_TRNS, KC_TRNS, KC_MS_U, KC_TRNS, KC_TRNS, KC_TRNS,
        KC_TRNS, KC_TRNS, KC_MS_L, KC_MS_D, KC_MS_R, KC_TRNS,
@@ -152,7 +164,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 const uint16_t PROGMEM fn_actions[] = {
-    [1] = ACTION_LAYER_TAP_TOGGLE(SYMB)                // FN1 - Momentary Layer 1 (Symbols)
+    [1] = ACTION_LAYER_TAP_TOGGLE(MDIA)                // FN1 - Momentary Layer 1 (MEDIA)
 };
 
 const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
