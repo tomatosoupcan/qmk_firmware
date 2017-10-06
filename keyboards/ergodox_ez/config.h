@@ -86,6 +86,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define PREVENT_STUCK_MODIFIERS
 
 #define USB_MAX_POWER_CONSUMPTION 500
+#define ONESHOT_TAP_TOGGLE 5
+#define ONESHOT_TIMEOUT 10000
 
 /*
  * Feature disable options
