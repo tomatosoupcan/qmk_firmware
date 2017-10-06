@@ -25,6 +25,7 @@ enum custom_keycodes {
   WHAT1,
   SLAPTO,
   SDESKT,
+  SAFQR,
   DYNAMIC_MACRO_RANGE
 };
 
@@ -265,7 +266,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
  * |        |      |      | DIM  |      |      |------|           |------|      |      |      |      |      |        |
  * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * |        | SLAP | SDESK| SHRUG| EYES | WHAT |      |           |      |      |      |      |      |      |        |
+ * |        | SLAP | SDESK| SHRUG| EYES | WHAT |      |           |      | SAFQR|      |      |      |      |        |
  * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
  *   |      |      |      |      |      |                                       |      |      |      |      |      |
  *   `----------------------------------'                                       `----------------------------------'
@@ -291,7 +292,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
        KC_TRNS,          KC_TRNS,         KC_TRNS,      KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
        KC_TRNS,          KC_TRNS,         KC_TRNS,      KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
                          KC_TRNS,         KC_TRNS,      KC_TRNS, KC_TRNS, KC_SCLN, KC_TRNS,
-       KC_TRNS,          KC_TRNS,         KC_TRNS,      KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+       KC_TRNS,            SAFQR,         KC_TRNS,      KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
                          KC_TRNS,         KC_TRNS,      KC_TRNS, KC_TRNS, KC_TRNS,
        KC_TRNS, KC_TRNS,
        KC_TRNS,
@@ -380,6 +381,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 			SEND_STRING(SS_DOWN(X_LCTRL)SS_DOWN(X_LALT)SS_UP(X_LCTRL)SS_UP(X_LALT));
 		}
 	break;
+	case SAFQR:
+		if (record->event.pressed) {
+			SEND_STRING("BEGIN TRAN"SS_TAP(X_ENTER)SS_TAP(X_ENTER)"ROLLBACK TRAN"SS_TAP(X_UP));
+		}
   }
   return true;
 }
