@@ -3,9 +3,17 @@
 #include "action_layer.h"
 #include "version.h"
 
-#define BASE 0 // default layer
-#define SYMB 1 // symbols
-#define MDIA 2 // media keys
+#define BASE 0 // norman
+#define MDIA 1 // function & media
+#define QWRT 2 // qwerty
+#define WHAT 3 // Reserved for more macros
+#define MCRO 4 // Macros
+#define NMPD 5 // number pad
+#define UNDSC LSHIFT(KC_MINUS)
+#define QUEST LSHIFT(KC_SLASH)
+#define ATBTN LSHIFT(KC_2)
+#define PRCNT LSHIFT(KC_5)
+#define KEYPR LALT(KC_SPACE)
 
 enum custom_keycodes {
   PLACEHOLDER = SAFE_RANGE, // can always be here
@@ -49,14 +57,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 																							  KC_UP,
 																		   KC_BSPC,KC_DEL,  KC_DOWN,
         // right hand
-             KC_RGHT,     KC_6,   KC_7,  KC_8,   KC_9,   KC_0,             KC_MINS,
-             TG(SYMB),    KC_Y,   KC_U,  KC_I,   KC_O,   KC_P,             KC_BSLS,
-                          KC_H,   KC_J,  KC_K,   KC_L,   LT(MDIA, KC_SCLN),GUI_T(KC_QUOT),
-             MEH_T(KC_NO),KC_N,   KC_M,  KC_COMM,KC_DOT, CTL_T(KC_SLSH),   KC_RSFT,
-                                  KC_UP, KC_DOWN,KC_LBRC,KC_RBRC,          KC_FN1,
-             KC_LALT,        CTL_T(KC_ESC),
-             KC_PGUP,
-             KC_PGDN,KC_TAB, KC_ENT
+             UNDSC   ,     KC_6,   KC_7,     KC_8,   KC_9,      KC_0,             KC_EQL,
+             KC_MYCM ,     KC_J,   KC_U,     KC_R,   KC_L,   KC_SCLN,            KC_MINS,
+                           KC_Y,   KC_N,     KC_I,   KC_O,      KC_H,              QUEST,
+                KEYPR,     KC_P,   KC_M,  KC_COMM, KC_DOT,  KC_QUOTE,              PRCNT,
+                                KC_LBRC,  KC_RBRC,KC_SLSH,    C_BSLS,              ATBTN,
+ KC_HOME,        KC_END,
+ KC_PGUP,
+ KC_PGDN,KC_ENT, KC_SPC
     ),
 /* Keymap 1: Symbol Layer
  *
