@@ -13,8 +13,8 @@
 #define THMUP LCTL(LSFT(KC_U))
 #define THMDWN LCTL(LSFT(KC_D))
 #define AUDSRC LCTL(LSFT(KC_GRV))
-#define SLAPTO LCTL(KC_GRV)
-#define SDESKT LCTL(LALT(KC_GRV))
+#define SDESKT LCTL(KC_GRV)
+#define SLAPTO LCTL(LALT(KC_GRV))
 #define DIM LCTL(LSFT(KC_0))
 
 enum custom_keycodes {
@@ -24,19 +24,27 @@ enum custom_keycodes {
   RGB_SLD,
   SHRUG1,
   EYES,
-  WHAT1
+  WHAT1,
+  DYNAMIC_MACRO_RANGE
 };
+
+#include "dynamic_macro.h"
 
 enum {
 	TD_QURI,
 	TD_SHLE,
-	TD_5F5
+	TD_5F5,
+	TD_MRB,
+	TD_MLB,
+	TD_MBS,
+	TD_MSS,
+	TD_MAT
 };
 
 qk_tap_dance_action_t tap_dance_actions[] = {
 	[TD_QURI] = ACTION_TAP_DANCE_DOUBLE(KC_QUES, LSFT(KC_0)),
 	[TD_SHLE] = ACTION_TAP_DANCE_DOUBLE(KC_LSHIFT, LSFT(KC_9)),
-	[TD_5F5]  = ACTION_TAP_DANCE_DOUBLE(KC_5, KC_F5)
+	[TD_5F5]  = ACTION_TAP_DANCE_DOUBLE(KC_5, KC_F5),
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -163,7 +171,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                           KC_P0  , KC_P0  , KC_PDOT, KC_PENT, KC_TRNS,
        KC_TRNS, KC_TRNS,
        KC_TRNS,
-       KC_TRNS, KC_TRNS, KC_TRNS
+       KC_TRNS  , KC_TRNS, KC_TRNS
 ),
 /* Keymap 3: Function Keys and Media Keys
  *
@@ -183,7 +191,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                                 ,------|------|------|       |------+------+------.
  *                                 |      |      |      |       |      |      |      |
  *                                 |      |      |------|       |------|      |      |
- *                                 |      |      | TNSY |       | EPRM |      |      |
+ *                                 |      |      | TNSY |       | TNSY |      |      |
  *                                 `--------------------'       `--------------------'
  */
 // Function keys and media keys
@@ -280,11 +288,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                     KC_TRNS,
                                   KC_TRNS, KC_TRNS, KC_TRNS,
     // right hand
-       KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-       KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-                 KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_SCLN, KC_TRNS,
-       KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-                          KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+       KC_TRNS,          KC_TRNS,         KC_TRNS,      KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+       KC_TRNS,          KC_TRNS,         KC_TRNS,      KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+                         KC_TRNS,         KC_TRNS,      KC_TRNS, KC_TRNS, KC_SCLN, KC_TRNS,
+       KC_TRNS,          KC_TRNS,         KC_TRNS,      KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+                         KC_TRNS,         KC_TRNS,      KC_TRNS, KC_TRNS, KC_TRNS,
        KC_TRNS, KC_TRNS,
        KC_TRNS,
        KC_TRNS, KC_TRNS, KC_TRNS
@@ -314,6 +322,9 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  if (!process_record_dynamic_macro(keycode, record)) {
+	  return false;
+  }
   switch (keycode) {
     // dynamically generate these.
     case EPRM:

@@ -1,0 +1,20 @@
+[BASE] = LAYOUT_ergodox(  // layer 0 : default
+        // left hand
+        KC_ESC,         KC_1  ,         KC_2 ,   KC_3 ,   KC_4 ,TD(TD_5F5),   KC_GRV ,
+        KC_TAB,         KC_Q  ,         KC_W ,   KC_D ,   KC_F ,      KC_K,   KC_LGUI,
+        TD(TD_SHLE),    KC_A  ,         KC_S ,   KC_E ,   KC_T ,      KC_G,
+        KC_LCTL,        KC_Z  ,         KC_X ,   KC_C ,   KC_V ,      KC_B,   KC_LALT,
+        TG(2)  ,        TG(1),         OSL(3),   OSL(4),  OSL(5),
+																				   KC_LEFT,KC_RIGHT,
+																							  KC_UP,
+																		   KC_BSPC,KC_DEL,  KC_DOWN,
+        // right hand
+             KC_UNDS   ,     KC_6,   KC_7,     KC_8,   KC_9,      KC_0,             KC_EQL,
+             KC_MYCM   ,     KC_J,   KC_U,     KC_R,   KC_L,   KC_SCLN,            KC_MINS,
+                             KC_Y,   KC_N,     KC_I,   KC_O,      KC_H,            TD(TD_QURI),
+                KEYPR,       KC_P,   KC_M,  KC_COMM, KC_DOT,  KC_QUOTE,            KC_PERC,
+                                  KC_LBRC,  KC_RBRC,KC_SLSH,   KC_BSLS,              KC_AT,
+ KC_HOME,        KC_END,
+ KC_PGUP,
+ KC_PGDN,KC_ENT, KC_SPC
+    ),
