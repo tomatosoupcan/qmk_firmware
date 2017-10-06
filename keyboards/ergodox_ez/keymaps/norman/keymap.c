@@ -7,8 +7,8 @@
 #define QWRT 1 // function & media
 #define NMPD 2 // number pad
 #define MDIA 3 // qwerty
-//#define WHAT 4 // Reserved for more macros
-//#define MCRO 5 // Macros
+#define WHAT 4 // Reserved for more macros
+#define MCRO 5 // Macros
 #define KEYPR LALT(KC_SPACE)
 #define THMUP LCTL(LSFT(KC_U))
 #define THMDWN LCTL(LSFT(KC_D))
@@ -203,6 +203,88 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
        KC_TRNS, KC_TRNS,
        KC_TRNS,
        EPRM   , KC_TRNS, KC_TRNS
+),
+/* Keymap 4: Empty Layer
+ *
+ * ,--------------------------------------------------.           ,--------------------------------------------------.
+ * |        |      |      |      |      |      |      |           |      |      |      |      |      |      |        |
+ * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
+ * |        |      |      |      |      |      |      |           |      |      |      |      |      |      |        |
+ * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
+ * |        |      |      |      |      |      |------|           |------|      |      |      |      |      |        |
+ * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
+ * |        |      |      |      |      |      |      |           |      |      |      |      |      |      |        |
+ * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
+ *   |      |      |      |      |      |                                       |      |      |      |      |      |
+ *   `----------------------------------'                                       `----------------------------------'
+ *                                        ,-------------.       ,-------------.
+ *                                        |      |      |       |      |      |
+ *                                 ,------|------|------|       |------+------+------.
+ *                                 |      |      |      |       |      |      |      |
+ *                                 |      |      |------|       |------|      |      |
+ *                                 |      |      |      |       |      |      |      |
+ *                                 `--------------------'       `--------------------'
+ */
+// What
+[WHAT] = LAYOUT_ergodox(
+       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+                                           KC_TRNS, KC_TRNS,
+                                                    KC_TRNS,
+                                  KC_TRNS, KC_TRNS, KC_TRNS,
+    // right hand
+       KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+       KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+                 KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_SCLN, KC_TRNS,
+       KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+                          KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+       KC_TRNS, KC_TRNS,
+       KC_TRNS,
+       KC_TRNS, KC_TRNS, KC_TRNS
+),
+/* Keymap 5: Macro Layer
+ *
+ * ,--------------------------------------------------.           ,--------------------------------------------------.
+ * |        |      |      |      |      |      |      |           |      |      |      |      |      |      |        |
+ * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
+ * |        |      |      |      |      |      |      |           |      |      |      |      |      |      |        |
+ * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
+ * |        |      |      |      |      |      |------|           |------|      |      |      |      |      |        |
+ * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
+ * |        | SLAP | SDESK| SHRUG|      |      |      |           |      |      |      |      |      |      |        |
+ * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
+ *   |      |      |      |      |      |                                       |      |      |      |      |      |
+ *   `----------------------------------'                                       `----------------------------------'
+ *                                        ,-------------.       ,-------------.
+ *                                        |      |      |       |      |      |
+ *                                 ,------|------|------|       |------+------+------.
+ *                                 |      |      |      |       |      |      |      |
+ *                                 |      |      |------|       |------|      |      |
+ *                                 |      |      |      |       |      |      |      |
+ *                                 `--------------------'       `--------------------'
+ */
+// MACRO
+[MCRO] = LAYOUT_ergodox(
+       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+       KC_TRNS, SLAPTO , SDESKT , SHRUG  , KC_TRNS, KC_TRNS, KC_TRNS,
+       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+                                           KC_TRNS, KC_TRNS,
+                                                    KC_TRNS,
+                                  KC_TRNS, KC_TRNS, KC_TRNS,
+    // right hand
+       KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+       KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+                 KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_SCLN, KC_TRNS,
+       KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+                          KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+       KC_TRNS, KC_TRNS,
+       KC_TRNS,
+       KC_TRNS, KC_TRNS, KC_TRNS
 ),
 };
 
