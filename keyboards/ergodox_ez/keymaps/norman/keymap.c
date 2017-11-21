@@ -35,7 +35,7 @@ enum custom_keycodes {
 enum {
 	TD_QURI,
 	TD_SHLE,
-	TD_5F5,
+	TD_GF5,
 	TD_MRB,
 	TD_MLB,
 	TD_MBS,
