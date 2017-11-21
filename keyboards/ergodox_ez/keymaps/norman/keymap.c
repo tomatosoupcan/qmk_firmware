@@ -46,14 +46,14 @@ enum {
 qk_tap_dance_action_t tap_dance_actions[] = {
 	[TD_QURI] = ACTION_TAP_DANCE_DOUBLE(KC_QUES, LSFT(KC_0)),
 	[TD_SHLE] = ACTION_TAP_DANCE_DOUBLE(KC_LSHIFT, LSFT(KC_9)),
-	[TD_5F5]  = ACTION_TAP_DANCE_DOUBLE(KC_5, KC_F5)
+	[TD_GF5]  = ACTION_TAP_DANCE_DOUBLE(KC_GRV, KC_F5)
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /* Keymap 0: Basic layer
  *
  * ,--------------------------------------------------.           ,--------------------------------------------------.
- * |   ESC  |   1  |   2  |   3  |   4  | 5/F5 |   `  |           |  _   |   6  |   7  |   8  |   9  |   0  |   =    |
+ * |   ESC  |   1  |   2  |   3  |   4  |   5  | `/F5 |           |  _   |   6  |   7  |   8  |   9  |   0  |   =    |
  * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
  * | TAB    |   Q  |   W  |   D  |   F  |   K  | LGUI |           |MYCM  |   J  |   U  |   R  |   L  |   ;  |   -    |
  * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
@@ -75,7 +75,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // Otherwise, it needs KC_*
 [BASE] = LAYOUT_ergodox(  // layer 0 : default
         // left hand
-        KC_ESC,         KC_1  ,         KC_2 ,   KC_3 ,   KC_4 ,TD(TD_5F5),   KC_GRV ,
+        KC_ESC,         KC_1  ,         KC_2 ,   KC_3 ,   KC_4 ,      KC_5,   TD(TD_GF5),
         KC_TAB,         KC_Q  ,         KC_W ,   KC_D ,   KC_F ,      KC_K,   KC_LGUI,
         TD(TD_SHLE),    KC_A  ,         KC_S ,   KC_E ,   KC_T ,      KC_G,
         KC_LCTL,        KC_Z  ,         KC_X ,   KC_C ,   KC_V ,      KC_B,   KC_LALT,
