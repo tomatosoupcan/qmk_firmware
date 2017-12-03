@@ -1,0 +1,5 @@
+make ergodox_ex-norman
+make bananasplit-norman
+git add .
+git commit -m "comment"
+git push
