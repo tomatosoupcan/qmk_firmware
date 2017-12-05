@@ -42,7 +42,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //#define MATRIX_HAS_GHOST
 
 /* number of backlight levels */
-#define BACKLIGHT_LEVELS  5
+#define BACKLIGHT_LEVELS  1
 
 /* mapping backlight LEDs to correct Pin */
 #define BACKLIGHT_PIN B7

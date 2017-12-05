@@ -120,7 +120,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	-------------------------------------------------------------------------------------------
 	|  Tab   |VolDn| Mute|VolUp|NmLk | Kp/| Kp7 | Kp8 | Kp9 | Kp- | EYES| BEAR|LENNY| PrtScrn |
 	-------------------------------------------------------------------------------------------
-	|  Shift  | Prev| Play| Next| WINT| Kp* | Kp4 | Kp5 | Kp6 | Kp+ | TOGG| STEP|   KpEnter   |
+	|  Shift  | Prev| Play| Next| WINT| Kp* | Kp4 | Kp5 | Kp6 | Kp+ | CALC| MYCM|   KpEnter   |
 	-------------------------------------------------------------------------------------------
 	|    Ctrl     | AXIN| Stop| Cn75| CnMs| Kp0 | Kp1 | Kp2 | Kp3 | Kp. |  SfTr  | PgUp |Home |
 	-------------------------------------------------------------------------------------------
@@ -130,7 +130,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	[1] = KEYMAP( \
 		RESET,   KC_F1,   KC_F2,   KC_F3,  KC_F4,  KC_F5,  KC_F6, KC_F7,  KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  MOVEL,   MOVER, \
 		KC_TAB,  KC_VOLD, KC_MUTE, KC_VOLU,KC_NLCK,KC_PSLS,KC_P7, KC_P8,  KC_P9,   KC_PMNS, EYES,    BEAR,    LENNY,   KC_PSCR, \
-		KC_LSFT, KC_MPRV, KC_MPLY, KC_MNXT,WINT,   KC_PAST,KC_P4, KC_P5,  KC_P6,   KC_PPLS, BL_TOGG, BL_STEP, KC_PENT, \
+		KC_LSFT, KC_MPRV, KC_MPLY, KC_MNXT,WINT,   KC_PAST,KC_P4, KC_P5,  KC_P6,   KC_PPLS, KC_CALC, KC_MYCM, KC_PENT, \
 		KC_LCTL,          AXIN,    KC_MSTP,CN75,   CNMS,   KC_P0, KC_P1,  KC_P2,   KC_P3,   KC_PDOT, SFTR,    KC_PGUP, KC_HOME,\
 		DIM,     KC_LGUI, KC_LALT,         LPTP,           SHRG,  DESK,            STDC,             ENDC,    KC_PGDN, KC_END\
 	),
