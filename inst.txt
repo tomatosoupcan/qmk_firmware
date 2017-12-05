@@ -1,5 +1,9 @@
-make ergodox_ex-norman
-make bananasplit-norman
+on windows:
 git add .
 git commit -m "comment"
 git push
+
+on linux:
+git pull
+make bananasplit-norman
+make ergodox_ez-norman

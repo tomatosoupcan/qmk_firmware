@@ -2,6 +2,8 @@
 #include "debug.h"
 #include "action_layer.h"
 #include "version.h" 
+//Norman layout with Qwerty Switch and Function Layer
+
 
 enum {
   TD_QUPE
