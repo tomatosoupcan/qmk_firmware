@@ -7,3 +7,9 @@ on linux:
 git pull
 make bananasplit-norman
 make ergodox_ez-norman
+cp bananasplit-norman.hex /var/www/mutavault/hex
+cp ergodox_ez_norman.hex /var/www/mutavault/hex
+githubrelease release tomatosoupcan/qmk_firmware create 1.X.X --publish --name "XXXXX - BSplit and Ergodox" "*.hex"
+
+download https://mutavau.lt/hex/bananasplit-norman.hex and https://mutavau.lt/hex/ergodox_ex-norman.hex
+download https://github.com/tomatosoupcan/qmk_firmware/releases

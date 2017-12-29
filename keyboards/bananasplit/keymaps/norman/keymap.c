@@ -3,7 +3,16 @@
 #include "action_layer.h"
 #include "version.h" 
 //Norman layout with Qwerty Switch and Function Layer
-
+#define KPIR LALT(KC_SPACE)
+#define MOVER LGUI(LSFT(KC_RGHT))
+#define MOVEL LGUI(LSFT(KC_LEFT))
+#define WINT LCTL(LSFT(LGUI(T)))
+#define AXIN LCTL(LSFT(KC_GRV))
+#define CN75 LCTL(LGUI(S))
+#define CNMS LCTL(LSFT(1))
+#define DIM LCTL(LSFT(KC_0))
+#define STDC LCTL(KC_HOME)
+#define ENDC LCTL(KC_END)
 
 enum {
   TD_QUPE
@@ -32,6 +41,9 @@ enum custom_keycodes {
   STDC,
   ENDC
 };
+
+
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
     // dynamically generate these.
