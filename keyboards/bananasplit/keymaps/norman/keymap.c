@@ -96,6 +96,17 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   return true;
 }
 
+#define KPIR LALT(KC_SPACE)
+#define MOVER LGUI(LSFT(KC_RGHT))
+#define MOVEL LGUI(LSFT(KC_LEFT))
+#define WINT LCTL(LSFT(LGUI(T)))
+#define AXIN LCTL(LSFT(KC_GRV))
+#define CN75 LCTL(LGUI(S))
+#define CNMS LCTL(LSFT(1))
+#define DIM LCTL(LSFT(KC_0))
+#define STDC LCTL(KC_HOME)
+#define ENDC LCTL(KC_END)
+
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	/*
