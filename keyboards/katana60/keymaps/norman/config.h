@@ -21,7 +21,4 @@
 
 // place overrides here
 
-#define DEBOUNCING_DELAY  5
-#define TAPPING_TERM      175
-
 #endif
