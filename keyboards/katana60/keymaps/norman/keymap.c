@@ -242,7 +242,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   SFTR,    KC_BTN1, KC_MS_U, KC_BTN2, KC_WH_U, WINT,    KC_F11,           KC_F12,  RETB,    WINE,    EYES,    BEAR,    LENNY,   KC_PSCR,
   KC_LSFT, KC_MS_L, KC_MS_D, KC_MS_R, KC_WH_D, AVLD,    KC_VOLD,          KC_VOLU, AVLU,    WAOT,    MINI,    CLAP,    THNK,    KC_ENT,
   KC_LCTL, AXIN,    LKTW,    CN75,    CNMS,    AVLM,    KC_MPRV, KC_MPLY, KC_MNXT, KC_MUTE, TSMN,    CALL,    CRYL,    THUP,    TADA,
-  DIM,     KC_LGUI, KC_LALT, KC_TRNS,                   LPTP,    SHRG,    DESK,             NTPD,    TG(4),   OKAY,    THDN,    FIRE
+  DIM,     KC_LGUI, KC_LALT, KC_TRNS,                   LPTP,    SHRG,    DESK,             NTPD,    TG(5),   OKAY,    THDN,    FIRE
     ),
 [SWAP] = LAYOUT(
   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
