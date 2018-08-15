@@ -221,7 +221,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 #define NORM 0 // Norman
 #define QWER 1 // Qwerty
-#define FUNC 2 // Functions
+#define FUNT 2 // Functions
 #define SWAP 3 // Swap spaces
 #define NUMB 4 // Numpad
 
@@ -241,7 +241,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_PERC, KC_LGUI, KC_LALT, LT(2, KC_SLSH),            KC_BSPC, KPIR,    KC_SPC,           KC_F5,   KC_QUOT, KC_LEFT, KC_DOWN, KC_RIGHT
     ),
 
-[FUNC] = LAYOUT(
+[FUNT] = LAYOUT(
   KC_ESC,  KC_BTN3, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   TG(4),   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  MOVEL,   MOVER,
   SFTR,    KC_BTN1, KC_MS_U, KC_BTN2, KC_WH_U, WINT,    KC_F11,           KC_F12,  RETB,    WINE,    EYES,    BEAR,    LENNY,   KC_PSCR,
   KC_LSFT, KC_MS_L, KC_MS_D, KC_MS_R, KC_WH_D, AVLD,    KC_VOLD,          KC_VOLU, AVLU,    WAOT,    MINI,    CLAP,    THNK,    KC_ENT,
