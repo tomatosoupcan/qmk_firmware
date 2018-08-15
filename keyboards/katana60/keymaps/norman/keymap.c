@@ -65,10 +65,6 @@ enum {
   TD_QUPE = 0
 };
 
-qk_tap_dance_action_t tap_dance_actions[] = {
-        [TD_QUPE] = ACTION_TAP_DANCE_DOUBLE(KC_QUES, KC_PERC)
-};
-
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
     // dynamically generate these.
