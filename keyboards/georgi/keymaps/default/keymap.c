@@ -26,7 +26,7 @@ int getKeymapCount(void);
  * ,---------------------------------.    ,------------------------------.
  * | FN  | LSU | LFT | LP | LH | ST1 |    | ST3 | RF | RP | RL | RT | RD |
  * |-----+-----+-----+----+----|-----|    |-----|----+----+----+----+----|
- * | PWR | LSD | LK  | LW | LR | ST2 |    | ST4 | RR | RG | RB | RS | RZ |
+ * | PWR | LSD | LK  | LW | LR | ST2 |    | ST4 | RR | RB | RG | RS | RZ |
  * `---------------------------------'    `------------------------------'
  *                   ,---------------,    .---------------.
  *                   | NUM | LA | LO |    | RE | RU | NUM |
@@ -202,7 +202,7 @@ bool processQwerty(void) {
 
 // "Layers"
 // Steno layer should be first in your map.
-// When PWR | FN | RR | RG | RB | RS is pressed, the layer is increased to the next map. You must return to STENO_LAYER at the end.
+// When PWR | FN | ST1 | ST2 is pressed, the layer is increased to the next map. You must return to STENO_LAYER at the end.
 // If you have only a single layer, you must set SINGLELAYER = yes in your rules.mk, otherwise you may experince undefined behaviour
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -221,7 +221,7 @@ KC_LALT, KC_SPC, LT(GAMING_2, KC_ENT),	     KC_DEL, KC_ASTR,  TO(STENO_LAYER)),
 [GAMING_2] = LAYOUT_georgi(  
 KC_LSFT, KC_1, KC_2, KC_3, KC_4, KC_5,       KC_6, KC_7, KC_8,  KC_9,  KC_0, KC_MINS,
 KC_LCTL, KC_Z, KC_X, KC_C, KC_V, KC_B,       KC_N, KC_M, KC_LT, KC_GT, KC_QUES, KC_RSFT,
-			  KC_LALT, KC_SPC, KC_ENT,	     KC_DEL, KC_ASTR,  TO(STENO_LAYER))
+			  KC_LALT, KC_SPC, KC_NO,       	     KC_DEL, KC_ASTR,  TO(STENO_LAYER))
 }; 
 
 int getKeymapCount(void) {
