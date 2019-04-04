@@ -23,7 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* Defaults */
 
-#define VERSION "Alpha 01: Ted "
+#define VERSION "Alpha 02: Frag "
 #define VERBOSE
 
 #define FORCE_NKRO
@@ -37,7 +37,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define VENDOR_ID       0xFEED
 #define PRODUCT_ID      0x1337
 #define DEVICE_VER      0x0001
-#define MANUFACTURER    g Heavy Industries 
+#define MANUFACTURER    g Heavy Industries
 #define PRODUCT         Georgi
 #define DESCRIPTION     QMK keyboard firmware for Georgi
 
