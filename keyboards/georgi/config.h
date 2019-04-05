@@ -32,12 +32,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define NO_ACTION_FUNCTION
 #define NO_ACTION_ONESHOT
 #define NO_ACTION_FUNCTION
+#define NO_ACTION_TAPPING
 
 /* USB Device descriptor parameter */
 #define VENDOR_ID       0xFEED
 #define PRODUCT_ID      0x1337
 #define DEVICE_VER      0x0001
-#define MANUFACTURER    g Heavy Industries 
+#define MANUFACTURER    g Heavy Industries
 #define PRODUCT         Georgi
 #define DESCRIPTION     QMK keyboard firmware for Georgi
 

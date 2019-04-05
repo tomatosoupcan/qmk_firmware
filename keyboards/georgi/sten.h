@@ -12,6 +12,7 @@
 
 // Bitfield representing the current chord and it's changes
 uint32_t cChord = 0;				// Current Chord
+uint32_t tChord = 0;				// Temp Chord
 uint32_t pChord = 0;				// Previous Chord
 uint32_t chordState[32];			// Full Chord history
 int		 chordIndex = 0;			// Keys in current chord
@@ -48,9 +49,11 @@ uint16_t repTimer = 0;
 bool	inMouse = false;
 int8_t	mousePress;
 
-// See if a given chord is pressed. 
-// P will return 
-// PJ will continue processing, removing the found chord 
+bool symskip = false;
+
+// See if a given chord is pressed.
+// P will return
+// PJ will continue processing, removing the found chord
 #define P(chord, act)  if (cChord == (chord)) { act; cChord ^= chord; return true;}
 #define PJ(chord, act) if ((cChord & (chord)) == (chord)) { cChord ^= chord; act; }
 
@@ -59,9 +62,9 @@ int8_t	mousePress;
 #define STN(n) (1L<<n)
 
 //i.e) S(teno)R(ight)F
-enum ORDER { 
+enum ORDER {
 		SFN = 0, SPWR, SST1, SST2, SST3, SST4, SNUML, SNUMR,
-		SLSU, SLSD, SLT, SLK, SLP, SLW, SLH, SLR, SLA, SLO, 
+		SLSU, SLSD, SLT, SLK, SLP, SLW, SLH, SLR, SLA, SLO,
 		SRE, SRU, SRF, SRR, SRP, SRB, SRL, SRG, SRT, SRS, SRD, SRZ
 };
 
@@ -99,9 +102,15 @@ enum ORDER {
 #define RD  STN(SRD)
 #define RZ  STN(SRZ)
 
+// Static Move State
+bool  staticOn = false;
+
+// Repeat Stuff
+bool  sendOnce = false;
+
 
 // All processing done at chordUp goes through here
-bool send_steno_chord_user(steno_mode_t mode, uint8_t chord[6]) { 
+bool send_steno_chord_user(steno_mode_t mode, uint8_t chord[6]) {
 	// Check for mousekeys, this is release
 #ifdef MOUSEKEY_ENABLE
 	if (inMouse) {
@@ -115,7 +124,7 @@ bool send_steno_chord_user(steno_mode_t mode, uint8_t chord[6]) {
 	if (cChord == (PWR | FN | ST1 | ST2)) {
 		uprintf("Fallback Toggle\n");
 		QWERSTENO = !QWERSTENO;
-		
+
 		goto out;
 	}
 
@@ -145,6 +154,13 @@ bool send_steno_chord_user(steno_mode_t mode, uint8_t chord[6]) {
 		layer_on(1);
 		goto out;
 	}
+  // Handle Movement toggle
+  if (cChord == (ST2 | LH)) {
+    if (staticOn == false) {layer_on(3); staticOn = true;}
+    else {layer_off(3); staticOn = false;}
+    goto out;
+  }
+
 
 	// Lone FN press, toggle QWERTY
 	if (cChord == FN) {
@@ -160,11 +176,12 @@ bool send_steno_chord_user(steno_mode_t mode, uint8_t chord[6]) {
 
 	// Do QWERTY and Momentary QWERTY
 	if (cMode == QWERTY || (cMode == COMMAND) || (cChord & (FN | PWR))) {
+    if (sendOnce == true) goto out;
 		// Try to process entire chord, store leftovers
 		if (cChord & FN)  cChord ^= FN;
 		processQwerty();
 		pChord = cChord;
-	
+
 		// Check if the entire chord has been processed
 		// If not, walk back through the history trying to process columns
 		// These get buffered and written in reverse order
@@ -172,6 +189,7 @@ bool send_steno_chord_user(steno_mode_t mode, uint8_t chord[6]) {
 		int bufLen = 0;
 		uint32_t pMask = 0;
 
+    if (symskip == true) {symskip = false; goto out;}
 
 		while (cChord != 0 && chordIndex > 0) {
 				uint32_t mask = getLastCol(chordIndex-1);
@@ -188,9 +206,9 @@ bool send_steno_chord_user(steno_mode_t mode, uint8_t chord[6]) {
 			cChord = bufChords[i-1];
 			processQwerty();
 		}
-	
+
 		// In theory, we have a clean buffer here, otherwise
-		// we say 'fuck it' and just hamfist the rest of the 
+		// we say 'fuck it' and just hamfist the rest of the
 		// unprocessed chords after removing the cols
 		cChord = pChord & ~vertMask;
 		for (int i = 0; cChord != 0 && i < 10; i++)
@@ -207,31 +225,42 @@ bool send_steno_chord_user(steno_mode_t mode, uint8_t chord[6]) {
 
 steno:
 	// Hey that's a steno chord!
+  sendOnce = false;
 	inChord = false;
 	chordIndex = 0;
 	cChord = 0;
-	return true; 
+	return true;
 
 out:
+  sendOnce = false;
 	inChord = false;
 	chordIndex = 0;
 	clear_keyboard();
 	cChord = 0;
 
-	for (int i = 0; i < 32; i++) 
+	for (int i = 0; i < 32; i++)
 			chordState[i] = 0;
 	return false;
 }
 
-// Update Chord State 
-bool process_steno_user(uint16_t keycode, keyrecord_t *record) { 
+// Update Chord State
+bool process_steno_user(uint16_t keycode, keyrecord_t *record) {
 	// Everything happens in here when steno keys come in.
 	// Bail on keyup
 	if (!record->event.pressed) return true;
-
 	// Update key repeat timers
 	repTimer = timer_read();
 	inChord  = true;
+
+  if (cMode == QWERTY && keycode == STN_PWR) symskip = true;
+
+  if (cMode == QWERTY && keycode == STN_N7 && cChord != 0 && cChord != RU && cChord != (LO | RU)) {
+    sendOnce = true;
+    tChord = cChord;
+    processQwerty();
+    cChord = tChord;
+    return true;
+  }
 
 	// Switch on the press adding to chord
 	bool pr = record->event.pressed;
@@ -270,14 +299,13 @@ bool process_steno_user(uint16_t keycode, keyrecord_t *record) {
 			case STN_DR:			pr ? (cChord |= (RD)) : (cChord &= ~(RD)); break;
 			case STN_ZR:			pr ? (cChord |= (RZ)) : (cChord &= ~(RZ)); break;
 	}
-
 	// Store previous state for fastQWER
 	if (pr) {
-		chordState[chordIndex] = cChord; 
+		chordState[chordIndex] = cChord;
 		chordIndex++;
 	}
 
-	return true; 
+	return true;
 }
 void matrix_scan_user(void) {
 	// We abuse this for early sending of key
@@ -346,9 +374,10 @@ void SEND(uint8_t kc) {
 		uprintf("CMD LEN: %d BUF: %d\n", CMDLEN, MAX_CMD_BUF);
 		CMDBUF[CMDLEN] = kc;
 		CMDLEN++;
-	} 
+	}
 
-	if (cMode != COMMAND) register_code(kc);
+	if (cMode != COMMAND && (sendOnce == false || kc == KC_LGUI || kc == KC_LCTL || kc == KC_LALT || kc == KC_LSFT || kc == KC_RALT)) register_code(kc);
+  else if (cMode != COMMAND && sendOnce == true) tap_code(kc);
 	return;
 }
 
@@ -356,10 +385,10 @@ void SEND(uint8_t kc) {
 // Returns the mask to use
 uint32_t getLastCol(int depth) {
 	for (int j = 0; j < verticalCount; j++) {
-		if (depth == 0) { 
+		if (depth == 0) {
 			if ((chordState[0] & verticals[j]) != 0) return verticals[j];
 		} else {
-			if (((chordState[depth] ^ chordState[depth-1]) & verticals[j]) != 0) 
+			if (((chordState[depth] ^ chordState[depth-1]) & verticals[j]) != 0)
 				return verticals[j];
 		}
 	}
