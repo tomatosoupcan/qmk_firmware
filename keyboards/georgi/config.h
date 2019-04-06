@@ -23,7 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* Defaults */
 
-#define VERSION "Alpha 02: Frag2"
+#define VERSION "Alpha 02: Frag"
 #define VERBOSE
 
 #define FORCE_NKRO
