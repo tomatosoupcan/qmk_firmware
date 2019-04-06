@@ -14,6 +14,7 @@
 // Bitfield representing the current chord and it's changes
 uint32_t cChord = 0;				// Current Chord
 uint32_t pChord = 0;				// Previous Chord
+uint32_t tChord = 0;
 uint32_t chordState[32];			// Full Chord history
 int		 chordIndex = 0;			// Keys in current chord
 extern const uint32_t verticals[];	// Vertical pairs
@@ -49,6 +50,8 @@ uint16_t repTimer = 0;
 // Mousekeys state
 bool	inMouse = false;
 int8_t	mousePress;
+
+bool symskip = false;
 
 // Keymap helper
 #define P(chord, act) if (cChord == (chord)) { if (!lookup) {act;} return chord;}
@@ -97,6 +100,12 @@ enum ORDER {
 #define RS  STN(SRS)
 #define RD  STN(SRD)
 #define RZ  STN(SRZ)
+
+// Static Move State
+bool  staticOn = false;
+
+// Repeat Stuff
+bool  sendOnce = false;
 
 
 // All processing done at chordUp goes through here
@@ -151,6 +160,13 @@ bool send_steno_chord_user(steno_mode_t mode, uint8_t chord[6]) {
 		goto out;
 	}
 
+  // Handle Movement toggle
+  if (cChord == (ST2 | LH)) {
+    if (staticOn == false) {layer_on(3); staticOn = true;}
+    else {layer_off(3); staticOn = false;}
+    goto out;
+  }
+
 	// Lone FN press, toggle QWERTY
 	if (cChord == FN) {
 		(cMode == STENO) ? (cMode = QWERTY) : (cMode = STENO);
@@ -178,6 +194,8 @@ bool send_steno_chord_user(steno_mode_t mode, uint8_t chord[6]) {
 steno:
 	// Hey that's a steno chord!
 	inChord = false;
+  sendOnce = false;
+  symskip = false;
 	chordIndex = 0;
 	cChord = 0;
 	return true;
@@ -185,6 +203,8 @@ steno:
 out:
 	cChord = 0;
 	inChord = false;
+  sendOnce = false;
+  symskip = false;
 	chordIndex = 0;
 	clear_keyboard();
 	for (int i = 0; i < 32; i++)
@@ -202,6 +222,16 @@ bool process_steno_user(uint16_t keycode, keyrecord_t *record) {
 	// Update key repeat timers
 	repTimer = timer_read();
 	inChord  = true;
+
+  if (cMode == QWERTY && keycode == STN_PWR) symskip = true;
+
+  if (cMode == QWERTY && keycode == STN_N7 && cChord != 0 && cChord != RU && cChord != (LO | RU)) {
+    sendOnce = true;
+    tChord = cChord;
+    processQwerty(false);
+    cChord = tChord;
+    return true;
+  }
 
 	// Switch on the press adding to chord
 	bool pr = record->event.pressed;
@@ -320,7 +350,8 @@ void SEND(uint8_t kc) {
 		CMDLEN++;
 	}
 
-	if (cMode != COMMAND) register_code(kc);
+  if (cMode != COMMAND && (sendOnce == false || kc == KC_LGUI || kc == KC_LCTL || kc == KC_LALT || kc == KC_LSFT || kc == KC_RALT)) register_code(kc);
+  else if (cMode != COMMAND && sendOnce == true) tap_code(kc);
 	return;
 }
 
