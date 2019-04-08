@@ -2,6 +2,7 @@
 
 // Chord state
 uint32_t cChord 		= 0;		// Current Chord
+uint32_t tChord 		= 0;		// Current Chord
 int		 chordIndex 	= 0;		// Keys in previousachord
 int32_t  chordState[32];			// Full Chord history
 #define  QWERBUF	24					// Size of chords to buffer for output
@@ -37,8 +38,14 @@ uint16_t repTimer = 0;
 bool	inMouse = false;
 int8_t	mousePress;
 
+// Static Move State
+bool  staticOn = false;
+
+// Repeat Stuff
+bool  sendOnce = false;
+
 // All processing done at chordUp goes through here
-bool send_steno_chord_user(steno_mode_t mode, uint8_t chord[6]) { 
+bool send_steno_chord_user(steno_mode_t mode, uint8_t chord[6]) {
 	// Check for mousekeys, this is release
 #ifdef MOUSEKEY_ENABLE
 	if (inMouse) {
@@ -54,7 +61,7 @@ bool send_steno_chord_user(steno_mode_t mode, uint8_t chord[6]) {
 		uprintf("Fallback Toggle\n");
 #endif
 		QWERSTENO = !QWERSTENO;
-		
+
 		goto out;
 	}
 
@@ -89,6 +96,13 @@ bool send_steno_chord_user(steno_mode_t mode, uint8_t chord[6]) {
 		goto out;
 	}
 
+  // Handle Movement toggle
+  if (cChord == (ST2 | LH)) {
+    if (staticOn == false) {layer_on(3); staticOn = true;}
+    else {layer_off(3); staticOn = false;}
+    goto out;
+  }
+
 	// Lone FN press, toggle QWERTY
 #ifndef ONLYQWERTY
 	if (cChord == FN) {
@@ -105,6 +119,7 @@ bool send_steno_chord_user(steno_mode_t mode, uint8_t chord[6]) {
 
 	// Do QWERTY and Momentary QWERTY
 	if (cMode == QWERTY || (cMode == COMMAND) || (cChord & (FN | PWR))) {
+    if (sendOnce == true) goto out;
 		processChord(false);
 		goto out;
 	}
@@ -120,12 +135,14 @@ steno:
 	inChord = false;
 	chordIndex = 0;
 	cChord = 0;
-	return true; 
+  sendOnce = false;
+	return true;
 
 out:
 	cChord = 0;
 	inChord = false;
 	chordIndex = 0;
+  sendOnce = false;
 	clear_keyboard();
 	repEngaged  = false;
 	for (int i = 0; i < 32; i++)
@@ -134,8 +151,8 @@ out:
 	return false;
 }
 
-// Update Chord State 
-bool process_steno_user(uint16_t keycode, keyrecord_t *record) { 
+// Update Chord State
+bool process_steno_user(uint16_t keycode, keyrecord_t *record) {
 	// Everything happens in here when steno keys come in.
 	// Bail on keyup
 	if (!record->event.pressed) return true;
@@ -143,6 +160,13 @@ bool process_steno_user(uint16_t keycode, keyrecord_t *record) {
 	// Update key repeat timers
 	repTimer = timer_read();
 	inChord  = true;
+  if (cMode == QWERTY && keycode == STN_N7 && cChord != 0 && cChord != RU && cChord != (LO | RU)) {
+    sendOnce = true;
+    tChord = cChord;
+    processChord(false);
+    cChord = tChord;
+    return true;
+  }
 
 	// Switch on the press adding to chord
 	bool pr = record->event.pressed;
@@ -184,11 +208,11 @@ bool process_steno_user(uint16_t keycode, keyrecord_t *record) {
 
 	// Store previous state for fastQWER
 	if (pr) {
-		chordState[chordIndex] = cChord; 
+		chordState[chordIndex] = cChord;
 		chordIndex++;
 	}
 
-	return true; 
+	return true;
 }
 void matrix_scan_user(void) {
 	// We abuse this for early sending of key
@@ -214,7 +238,7 @@ void matrix_scan_user(void) {
 };
 
 // Helpers
-uint32_t processFakeSteno(bool lookup) { 
+uint32_t processFakeSteno(bool lookup) {
 	P( LSU,				SEND(KC_Q););
 	P( LSD,				SEND(KC_A););
 	P( LFT,				SEND(KC_W););
@@ -264,9 +288,10 @@ void SEND(uint8_t kc) {
 #endif
 		CMDBUF[CMDLEN] = kc;
 		CMDLEN++;
-	} 
+	}
 
-	if (cMode != COMMAND) register_code(kc);
+	if (cMode != COMMAND && (sendOnce == false || kc == KC_LGUI || kc == KC_LCTL || kc == KC_LALT || kc == KC_LSFT || kc == KC_RALT)) register_code(kc);
+  else if (cMode != COMMAND && sendOnce == true) tap_code(kc);
 	return;
 }
 void REPEAT(void) {
@@ -304,7 +329,7 @@ void processChord(bool useFakeSteno) {
 		return;
 	}
 
-	// Iterate through chord picking out the individual 
+	// Iterate through chord picking out the individual
 	// and longest chords
 	uint32_t bufChords[QWERBUF];
 	int 	 bufLen		= 0;
@@ -338,12 +363,12 @@ void processChord(bool useFakeSteno) {
 			} else {
 				test = processQwerty(true);
 			}
-		 
+
 			if (test != 0) {
 				longestChord = test;
 			}
 		}
-		
+
 		mask |= longestChord;
 		bufChords[bufLen] = longestChord;
 		bufLen++;
@@ -353,7 +378,7 @@ void processChord(bool useFakeSteno) {
 			return;
 		}
 	}
-	
+
 	// Now that the buffer is populated, we run it
 	for (int i = 0; i < bufLen ; i++) {
 		cChord = bufChords[i];
@@ -365,7 +390,7 @@ void processChord(bool useFakeSteno) {
 	}
 
 	// Save state in case of repeat
-	if (!repeatFlag) {			
+	if (!repeatFlag) {
 		saveState(savedChord);
 	}
 
@@ -377,12 +402,12 @@ void processChord(bool useFakeSteno) {
 void saveState(uint32_t cleanChord) {
 	pChord = cleanChord;
 	pChordIndex = chordIndex;
-	for (int i = 0; i < 32; i++) 
+	for (int i = 0; i < 32; i++)
 		pChordState[i] = chordState[i];
 }
 void restoreState() {
 	cChord = pChord;
 	chordIndex = pChordIndex;
-	for (int i = 0; i < 32; i++) 
+	for (int i = 0; i < 32; i++)
 		chordState[i] = pChordState[i];
 }
